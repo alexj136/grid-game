@@ -3,4 +3,4 @@ package GameLogic;
 /**
  * An unvisitable cell - does not need to be traversed.
  */
-public class EmptySpace {}
+public class EmptySpace extends Cell {}
