@@ -59,15 +59,34 @@ public class Grid {
         }
     }
 
+    /**
+     * Do a move in the specified direction.
+     * @param direction The direction of the move
+     */
     public void doMove(byte direction) throws InvalidMoveException {
+        // Error conditions
         if(!(direction == Grid.UP || direction == Grid.RIGHT
                     || direction == Grid.DOWN || direction == Grid.LEFT)) {
             throw new IllegalArgumentException("Invalid direction value");
         }
-        if(!this.availableMoves()[direction]) {
+        boolean[] dirs = this.availableMoves();
+        if(!dirs[direction]) {
             throw new InvalidMoveException();
         }
-        // TODO actual move stuff now that erroneous conditions are checked
+        // Checks are done so we can safely do the real thing
+        if(direction == Grid.UP) {
+            curRow--;
+        }
+        else if(direction == Grid.RIGHT) {
+            curCol++;
+        }
+        else if(direction == Grid.DOWN) {
+            curRow++;
+        }
+        else /*direction == Grid.LEFT*/ {
+            curCol--;
+        }
+        ((FloorTile)this.grid[curRow][curCol]).visit();
     }
 
     /**
