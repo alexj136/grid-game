@@ -2,6 +2,11 @@ package GameLogic;
 
 public class Grid {
 
+    public static final byte UP = 0;
+    public static final byte RIGHT = 1;
+    public static final byte DOWN = 2;
+    public static final byte LEFT = 3;
+
     private Cell[][] grid;
 
     private int curRow;
@@ -28,13 +33,16 @@ public class Grid {
 
         // Check that the start and end coordinates fall within the Grid
         // boundaries on non-empty Cells.
-        assert((startRow < template.length)
-            && (startCol < template[0].length)
-            && (endRow < template.length)
-            && (endCol < template[0].length)
-            && (template[startRow][startCol])
-            && (template[endRow][endCol])
-        );
+        if(!((startRow < template.length)
+                && (startCol < template[0].length)
+                && (endRow < template.length)
+                && (endCol < template[0].length)
+                && (template[startRow][startCol])
+                && (template[endRow][endCol]))) {
+
+            throw new IllegalArgumentException("Invalid start/end point "
+                    + "coordinates");
+        }
 
         this.curRow = startRow;
         this.curCol = startCol;
@@ -49,6 +57,37 @@ public class Grid {
                     template[rw][cl] ? new FloorTile() : new EmptySpace();
             }
         }
+    }
+
+    public void doMove(byte direction) throws InvalidMoveException {
+        if(!(direction == Grid.UP || direction == Grid.RIGHT
+                    || direction == Grid.DOWN || direction == Grid.LEFT)) {
+            throw new IllegalArgumentException("Invalid direction value");
+        }
+        if(!this.availableMoves()[direction]) {
+            throw new InvalidMoveException();
+        }
+        // TODO actual move stuff now that erroneous conditions are checked
+    }
+
+    /**
+     * Show which Cells are available to move into with respect to the current
+     * Cell.
+     * @return a boolean array A of length 4 where A[0] = true if UP is an
+     * available direction, false otherwise, and the same for A[1]: RIGHT, A[2]:
+     * DOWN and A[3]: LEFT.
+     */
+    public boolean[] availableMoves() {
+        boolean[] dirs = new boolean[4];
+        dirs[0] = this.curRow > 0
+            && this.grid[curRow - 1][curCol] instanceof FloorTile; // UP
+        dirs[1] = this.curCol < this.grid[0].length - 1
+            && this.grid[curRow][curCol + 1] instanceof FloorTile; // RIGHT
+        dirs[2] = this.curRow < this.grid.length - 1
+            && this.grid[curRow + 1][curCol] instanceof FloorTile; // DOWN
+        dirs[3] = this.curCol > 0
+            && this.grid[curRow][curCol - 1] instanceof FloorTile; // LEFT
+        return dirs;
     }
 
     /**
@@ -88,12 +127,11 @@ public class Grid {
     /**
      * A little test of Grid objects.
      * TODO remove this method from final build
-     * TODO fix whatever bug allows this code to run without failing the
-     * assertion in Grid()
      */
     public static void main(String[] args) {
         boolean[][] arr = new boolean[][] {{true, false}, {false, true}};
-        Grid g = new Grid(arr, 0, 0 , 1, 5);
+        Grid g = new Grid(arr, 0, 0, 1, 1);
         System.out.print(g);
+        for(boolean b : g.availableMoves()) System.out.print(b + " ");
     }
 }
