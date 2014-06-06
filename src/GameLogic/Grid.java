@@ -9,11 +9,14 @@ public class Grid {
 
     private Cell[][] grid;
 
+    private final int startRow;
+    private final int startCol;
+
     private int curRow;
     private int curCol;
 
-    private int endRow;
-    private int endCol;
+    private final int endRow;
+    private final int endCol;
 
     /**
      * Construct a new Grid from the given template.
@@ -44,8 +47,12 @@ public class Grid {
                     + "coordinates");
         }
 
+        this.startRow = startRow;
+        this.startCol = startCol;
+
         this.curRow = startRow;
         this.curCol = startCol;
+
         this.endRow = endRow;
         this.endCol = endCol;
 
@@ -60,7 +67,8 @@ public class Grid {
     }
 
     /**
-     * Do a move in the specified direction.
+     * Do a move in the specified direction. If the move is not valid, throw an
+     * exception.
      * @param direction The direction of the move
      */
     public void doMove(byte direction) throws InvalidMoveException {
@@ -73,20 +81,28 @@ public class Grid {
         if(!dirs[direction]) {
             throw new InvalidMoveException();
         }
-        // Checks are done so we can safely do the real thing
-        if(direction == Grid.UP) {
-            curRow--;
+
+        try {
+            if(direction == Grid.UP) {
+                curRow--;
+                ((FloorTile)this.grid[curRow][curCol]).visit();
+            }
+            else if(direction == Grid.RIGHT) {
+                curCol++;
+                ((FloorTile)this.grid[curRow][curCol]).visit();
+            }
+            else if(direction == Grid.DOWN) {
+                curRow++;
+                ((FloorTile)this.grid[curRow][curCol]).visit();
+            }
+            else /*direction == Grid.LEFT*/ {
+                curCol--;
+                ((FloorTile)this.grid[curRow][curCol]).visit();
+            }
         }
-        else if(direction == Grid.RIGHT) {
-            curCol++;
+        catch(MultipleFloorTileVisitsException mftve) {
+            throw new InvalidMoveException();
         }
-        else if(direction == Grid.DOWN) {
-            curRow++;
-        }
-        else /*direction == Grid.LEFT*/ {
-            curCol--;
-        }
-        ((FloorTile)this.grid[curRow][curCol]).visit();
     }
 
     /**
@@ -107,6 +123,27 @@ public class Grid {
         dirs[3] = this.curCol > 0
             && this.grid[curRow][curCol - 1] instanceof FloorTile; // LEFT
         return dirs;
+    }
+
+    /**
+     * Is this game over?
+     * @return true if no more moves can be made, false otherwise
+     */
+    public boolean hasFinished() {
+        boolean[] moveDirs = this.availableMoves();
+        return (!moveDirs[Grid.UP]) && (!moveDirs[Grid.RIGHT])
+            && (!moveDirs[Grid.DOWN]) && (!moveDirs[Grid.LEFT]);
+    }
+
+    /**
+     * Determine if this is grid has been completed successfully.
+     * @return true if the grid has been completed and has been completed
+     * successfully, false if it has not been completed or been completed
+     * unsuccessfully.
+     */
+    public boolean hasWon() {
+        System.out.println("WARNING: hasWon() not yet implemented");
+        return false;
     }
 
     /**
