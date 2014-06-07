@@ -67,6 +67,22 @@ public class Grid {
     }
 
     /**
+     * Get the number of rows in this Grid.
+     * @return the number of rows in this Grid
+     */
+    public int numRows() {
+        return this.grid.length;
+    }
+
+    /**
+     * Get the number of columns in this Grid.
+     * @return the number of columns in this Grid
+     */
+    public int numCols() {
+        return this.grid[0].length;
+    }
+
+    /**
      * Do a move in the specified direction. If the move is not valid, throw an
      * exception.
      * @param direction The direction of the move
