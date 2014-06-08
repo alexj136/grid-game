@@ -83,6 +83,16 @@ public class Grid {
     }
 
     /**
+     * Get the Cell at the specified location.
+     * @param row The row of the cell to access
+     * @param col The column of the cell to access
+     * @return the specified cell
+     */
+    public Cell cellAt(int row, int col) {
+        return this.grid[row][col];
+    }
+
+    /**
      * Do a move in the specified direction. If the move is not valid, throw an
      * exception.
      * @param direction The direction of the move
@@ -194,16 +204,5 @@ public class Grid {
             s += "\n";
         }
         return s;
-    }
-    
-    /**
-     * A little test of Grid objects.
-     * TODO remove this method from final build
-     */
-    public static void main(String[] args) {
-        boolean[][] arr = new boolean[][] {{true, false}, {false, true}};
-        Grid g = new Grid(arr, 0, 0, 1, 1);
-        System.out.print(g);
-        for(boolean b : g.availableMoves()) System.out.print(b + " ");
     }
 }
