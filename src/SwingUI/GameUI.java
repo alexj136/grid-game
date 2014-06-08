@@ -24,6 +24,7 @@ public class GameUI extends JFrame {
         this.grid = grid;
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.addKeyListener(new GameUIKeyListener(this));
+        this.setFocusable(true);
     }
 
     public void updateGridDisplay() {
@@ -75,16 +76,16 @@ public class GameUI extends JFrame {
 
         public void keyTyped(KeyEvent e) {
             try {
-                if(e.getKeyCode() == KeyEvent.VK_KP_UP) {
+                if(e.getKeyCode() == KeyEvent.VK_UP) {
                     owner.grid.doMove(Grid.UP);
                 }
-                else if(e.getKeyCode() == KeyEvent.VK_KP_RIGHT) {
+                else if(e.getKeyCode() == KeyEvent.VK_RIGHT) {
                     owner.grid.doMove(Grid.RIGHT);
                 }
-                else if(e.getKeyCode() == KeyEvent.VK_KP_DOWN) {
+                else if(e.getKeyCode() == KeyEvent.VK_DOWN) {
                     owner.grid.doMove(Grid.DOWN);
                 }
-                else if(e.getKeyCode() == KeyEvent.VK_KP_LEFT) {
+                else if(e.getKeyCode() == KeyEvent.VK_LEFT) {
                     owner.grid.doMove(Grid.LEFT);
                 }
             }
