@@ -15,8 +15,8 @@ public class Grid {
     private int curRow;
     private int curCol;
 
-    private final int endRow;
-    private final int endCol;
+    public final int endRow;
+    public final int endCol;
 
     /**
      * Construct a new Grid from the given template.
