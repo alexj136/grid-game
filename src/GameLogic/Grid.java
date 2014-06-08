@@ -83,6 +83,22 @@ public class Grid {
     }
 
     /**
+     * Get the currently occupied row.
+     * @return the currently occupied row
+     */
+    public int curRow() {
+        return this.curRow;
+    }
+
+    /**
+     * Get the currently occupied column.
+     * @return the currently occupied column
+     */
+    public int curCol() {
+        return this.curCol;
+    }
+
+    /**
      * Get the Cell at the specified location.
      * @param row The row of the cell to access
      * @param col The column of the cell to access

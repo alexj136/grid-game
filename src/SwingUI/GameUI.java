@@ -33,10 +33,20 @@ public class GameUI extends JFrame {
 
         for(int rw = 0; rw < this.grid.numRows(); rw++) {
             for(int cl = 0; cl < this.grid.numCols(); cl++) {
-                if(this.grid.cellAt(rw, cl) instanceof FloorTile) {
-                    this.panel.add(new JLabel(new ImageIcon("SwingUI/red.gif")));
+                Cell toAdd = this.grid.cellAt(rw, cl);
+                if(rw == this.grid.curRow() && cl == this.grid.curCol()) {
+                    this.panel.add(new JLabel(
+                        new ImageIcon("SwingUI/green.gif")));
                 }
-                // else if ...
+                else if(toAdd instanceof FloorTile) {
+                    this.panel.add(new JLabel(
+                        new ImageIcon("SwingUI/" +
+                            (((FloorTile) toAdd).visited() ? "blue" : "red") + ".gif")));
+                }
+                else /* if(toAdd instanceof EmptySpace) */ {
+                    this.panel.add(new JLabel(
+                        new ImageIcon("SwingUI/black.gif")));
+                }
             }
         }
     }
