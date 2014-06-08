@@ -20,7 +20,6 @@ public class GameUI extends JFrame {
     public GameUI(Grid grid) {
         this.grid = grid;
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.setVisible(true);
     }
 
     public void updateGridDisplay() {
@@ -36,19 +35,26 @@ public class GameUI extends JFrame {
                 Cell toAdd = this.grid.cellAt(rw, cl);
                 if(rw == this.grid.curRow() && cl == this.grid.curCol()) {
                     this.panel.add(new JLabel(
-                        new ImageIcon("SwingUI/green.gif")));
+                        //new ImageIcon("SwingUI/green.gif")));
+                        "C"));
                 }
                 else if(toAdd instanceof FloorTile) {
                     this.panel.add(new JLabel(
-                        new ImageIcon("SwingUI/" +
-                            (((FloorTile) toAdd).visited() ? "blue" : "red") + ".gif")));
+                        //new ImageIcon("SwingUI/" +
+                            //(((FloorTile) toAdd).visited() ?
+                            //"blue" : "red") + ".gif")));
+                        "T"));
                 }
                 else /* if(toAdd instanceof EmptySpace) */ {
                     this.panel.add(new JLabel(
-                        new ImageIcon("SwingUI/black.gif")));
+                        //new ImageIcon("SwingUI/black.gif")));
+                        "E"));
                 }
             }
         }
+        this.add(this.panel);
+        this.pack();
+        this.setVisible(true);
     }
 
     /**
