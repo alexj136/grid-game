@@ -69,7 +69,8 @@ public class GameUI extends JFrame {
                             (((FloorTile) current).visited() ?
                             "blue" : "red") + ".gif"));
                 }
-                else /* if(current instanceof EmptySpace) */ {
+                else {
+                    assert(current instanceof EmptySpace);
                     this.labels[rw][cl].setIcon(
                             new ImageIcon("SwingUI/black.gif"));
                 }
