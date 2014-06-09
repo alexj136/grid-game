@@ -1,5 +1,7 @@
 package SwingUI;
 
+import java.util.ArrayList;
+
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -18,16 +20,13 @@ import GameLogic.InvalidMoveException;
 public class GameUI extends JFrame {
 
     private JPanel panel;
+    private JLabel[][] labels;
     private Grid grid;
 
     public GameUI(Grid grid) {
         this.grid = grid;
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        this.addKeyListener(new GameUIKeyListener(this));
-        this.setFocusable(true);
-    }
 
-    public void updateGridDisplay() {
         this.panel = new JPanel(
             new GridLayout(
                 this.grid.numRows(),
@@ -35,32 +34,47 @@ public class GameUI extends JFrame {
             )
         );
 
+        this.labels = new JLabel[this.grid.numRows()][this.grid.numCols()];
+
         for(int rw = 0; rw < this.grid.numRows(); rw++) {
             for(int cl = 0; cl < this.grid.numCols(); cl++) {
-                Cell toAdd = this.grid.cellAt(rw, cl);
-                if(rw == this.grid.endRow && cl == this.grid.endCol) {
-                    this.panel.add(new JLabel(
-                        new ImageIcon("SwingUI/purple.gif")));
+                JLabel label = new JLabel();
+                this.panel.add(label);
+                this.labels[rw][cl] = label;
+            }
+        }
+
+        this.add(this.panel);
+        this.panel.addKeyListener(new GameUIKeyListener(this));
+        this.panel.setFocusable(true);
+        this.setVisible(true);
+        this.updateGridDisplay();
+    }
+
+    public void updateGridDisplay() {
+        for(int rw = 0; rw < this.grid.numRows(); rw++) {
+            for(int cl = 0; cl < this.grid.numCols(); cl++) {
+                Cell current = this.grid.cellAt(rw, cl);
+                if(rw == this.grid.curRow() && cl == this.grid.curCol()) {
+                    this.labels[rw][cl].setIcon(
+                            new ImageIcon("SwingUI/green.gif"));
                 }
-                else if(rw == this.grid.curRow() && cl == this.grid.curCol()) {
-                    this.panel.add(new JLabel(
-                        new ImageIcon("SwingUI/green.gif")));
+                else if(rw == this.grid.endRow && cl == this.grid.endCol) {
+                    this.labels[rw][cl].setIcon(
+                            new ImageIcon("SwingUI/purple.gif"));
                 }
-                else if(toAdd instanceof FloorTile) {
-                    this.panel.add(new JLabel(
-                        new ImageIcon("SwingUI/" +
-                            (((FloorTile) toAdd).visited() ?
-                            "blue" : "red") + ".gif")));
+                else if(current instanceof FloorTile) {
+                    this.labels[rw][cl].setIcon(
+                            new ImageIcon("SwingUI/" +
+                            (((FloorTile) current).visited() ?
+                            "blue" : "red") + ".gif"));
                 }
-                else /* if(toAdd instanceof EmptySpace) */ {
-                    this.panel.add(new JLabel(
-                        new ImageIcon("SwingUI/black.gif")));
+                else /* if(current instanceof EmptySpace) */ {
+                    this.labels[rw][cl].setIcon(
+                            new ImageIcon("SwingUI/black.gif"));
                 }
             }
         }
-        this.add(this.panel);
-        this.pack();
-        this.setVisible(true);
     }
 
     private class GameUIKeyListener implements KeyListener {
@@ -71,10 +85,10 @@ public class GameUI extends JFrame {
             this.owner = owner;
         }
 
-        public void keyPressed(KeyEvent e) { /* Do nothing */ }
         public void keyReleased(KeyEvent e) { /* Do nothing */ }
+        public void keyTyped(KeyEvent e) { /* Do nothing */ }
 
-        public void keyTyped(KeyEvent e) {
+        public void keyPressed(KeyEvent e) {
             try {
                 if(e.getKeyCode() == KeyEvent.VK_UP) {
                     owner.grid.doMove(Grid.UP);
@@ -89,9 +103,8 @@ public class GameUI extends JFrame {
                     owner.grid.doMove(Grid.LEFT);
                 }
             }
-            catch(InvalidMoveException ime) {
-                System.out.println("WARNING: Invalid move");
-            }
+            catch(InvalidMoveException ime) { /* Do nothing */ }
+            owner.updateGridDisplay();
         }
     }
 
@@ -106,9 +119,6 @@ public class GameUI extends JFrame {
             {true, true, true}
         };
         Grid g = new Grid(arr, 0, 0, 2, 2);
-        System.out.print(g);
-        for(boolean b : g.availableMoves()) System.out.print(b + " ");
         GameUI ui = new GameUI(g);
-        ui.updateGridDisplay();
     }
 }

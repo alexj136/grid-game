@@ -64,6 +64,14 @@ public class Grid {
                     template[rw][cl] ? new FloorTile() : new EmptySpace();
             }
         }
+
+        try {
+            ((FloorTile) this.grid[startRow][startCol]).visit();
+        }
+        catch(MultipleFloorTileVisitsException e) {
+            System.out.println("MultipleFloorTileVisitsException thrown" +
+                    " visiting starting FloorTile in Grid() constructor");
+        }
     }
 
     /**
@@ -126,20 +134,20 @@ public class Grid {
 
         try {
             if(direction == Grid.UP) {
+                ((FloorTile)this.grid[curRow - 1][curCol]).visit();
                 curRow--;
-                ((FloorTile)this.grid[curRow][curCol]).visit();
             }
             else if(direction == Grid.RIGHT) {
+                ((FloorTile)this.grid[curRow][curCol + 1]).visit();
                 curCol++;
-                ((FloorTile)this.grid[curRow][curCol]).visit();
             }
             else if(direction == Grid.DOWN) {
+                ((FloorTile)this.grid[curRow + 1][curCol]).visit();
                 curRow++;
-                ((FloorTile)this.grid[curRow][curCol]).visit();
             }
             else /*direction == Grid.LEFT*/ {
+                ((FloorTile)this.grid[curRow][curCol - 1]).visit();
                 curCol--;
-                ((FloorTile)this.grid[curRow][curCol]).visit();
             }
         }
         catch(MultipleFloorTileVisitsException mftve) {
