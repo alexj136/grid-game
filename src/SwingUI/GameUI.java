@@ -10,6 +10,7 @@ import javax.swing.ImageIcon;
 import java.awt.GridLayout;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
+import java.awt.Color;
 
 import GameLogic.Grid;
 import GameLogic.Cell;
@@ -39,6 +40,7 @@ public class GameUI extends JFrame {
         for(int rw = 0; rw < this.grid.numRows(); rw++) {
             for(int cl = 0; cl < this.grid.numCols(); cl++) {
                 JLabel label = new JLabel();
+                label.setOpaque(true);
                 this.panel.add(label);
                 this.labels[rw][cl] = label;
             }
@@ -56,23 +58,19 @@ public class GameUI extends JFrame {
             for(int cl = 0; cl < this.grid.numCols(); cl++) {
                 Cell current = this.grid.cellAt(rw, cl);
                 if(rw == this.grid.curRow() && cl == this.grid.curCol()) {
-                    this.labels[rw][cl].setIcon(
-                            new ImageIcon("SwingUI/green.gif"));
+                    this.labels[rw][cl].setBackground(Color.GREEN);
                 }
                 else if(rw == this.grid.endRow && cl == this.grid.endCol) {
-                    this.labels[rw][cl].setIcon(
-                            new ImageIcon("SwingUI/purple.gif"));
+                    this.labels[rw][cl].setBackground(Color.MAGENTA);
                 }
                 else if(current instanceof FloorTile) {
-                    this.labels[rw][cl].setIcon(
-                            new ImageIcon("SwingUI/" +
-                            (((FloorTile) current).visited() ?
-                            "blue" : "red") + ".gif"));
+                    this.labels[rw][cl].setBackground(
+                            ((FloorTile) current).visited() ?
+                            Color.BLUE : Color.RED);
                 }
                 else {
                     assert(current instanceof EmptySpace);
-                    this.labels[rw][cl].setIcon(
-                            new ImageIcon("SwingUI/black.gif"));
+                    this.labels[rw][cl].setBackground(Color.BLACK);
                 }
             }
         }
