@@ -21,11 +21,11 @@ import GameLogic.Coord;
 
 public class GameUI extends JFrame {
 
-    public static final Color VISITED = Color.BLUE;
-    public static final Color CURRENT = Color.GREEN;
-    public static final Color UNVISITED = Color.RED;
-    public static final Color END = Color.MAGENTA;
-    public static final Color EMPTY = Color.BLACK;
+    public static final Color VISITED = new Color(0, 43, 54); // Dark grey/green
+    public static final Color UNVISITED = new Color(38, 139, 210); // Blue
+    public static final Color CURRENT = new Color(133, 153, 0); // Green
+    public static final Color END = new Color(211, 54, 130); // Magenta
+    public static final Color EMPTY = new Color(238, 232, 213); // Off-white
 
     private JPanel panel;
     private JLabel[][] labels;
@@ -133,8 +133,8 @@ public class GameUI extends JFrame {
     public static void main(String[] args) {
         boolean[][] arr = new boolean[][] {
             {true, true, true},
-            {true, true, true},
-            {true, true, true}
+            {false, true, true},
+            {false, true, true}
         };
         Grid g = new Grid(arr, new Coord(0, 0), new Coord(2, 2));
         GameUI ui = new GameUI(g);
