@@ -9,14 +9,12 @@ public class Grid {
 
     private Cell[][] grid;
 
-    private final int startRow;
-    private final int startCol;
+    private final Coord start;
 
     private int curRow;
     private int curCol;
 
-    public final int endRow;
-    public final int endCol;
+    private final Coord end;
 
     /**
      * Construct a new Grid from the given template.
@@ -28,33 +26,28 @@ public class Grid {
      * @param endRow The row number of the ending Cell
      * @param endCol The column number of the ending Cell
      */
-    public Grid(boolean[][] template,
-            int startRow, int startCol, int endRow, int endCol) {
+    public Grid(boolean[][] template, Coord start, Coord end) {
 
         int rows = template.length;
         int cols = template[0].length;
 
         // Check that the start and end coordinates fall within the Grid
         // boundaries on non-empty Cells.
-        if(!((startRow < template.length)
-                && (startCol < template[0].length)
-                && (endRow < template.length)
-                && (endCol < template[0].length)
-                && (template[startRow][startCol])
-                && (template[endRow][endCol]))) {
+        if(!((start.row < template.length)
+                && (start.col < template[0].length)
+                && (end.row < template.length)
+                && (end.col < template[0].length)
+                && (template[start.row][start.col])
+                && (template[end.row][end.col]))) {
 
             throw new IllegalArgumentException("Invalid start/end point "
                     + "coordinates");
         }
 
-        this.startRow = startRow;
-        this.startCol = startCol;
-
-        this.curRow = startRow;
-        this.curCol = startCol;
-
-        this.endRow = endRow;
-        this.endCol = endCol;
+        this.curRow = start.row;
+        this.curCol = start.col;
+        this.start = start;
+        this.end = end;
 
         // Initialise the grid member array of Cells
         this.grid = new Cell[rows][cols];
@@ -66,7 +59,7 @@ public class Grid {
         }
 
         try {
-            ((FloorTile) this.grid[startRow][startCol]).visit();
+            ((FloorTile) this.grid[this.start.row][this.start.col]).visit();
         }
         catch(MultipleFloorTileVisitsException e) {
             System.out.println("MultipleFloorTileVisitsException thrown" +
@@ -91,19 +84,19 @@ public class Grid {
     }
 
     /**
-     * Get the currently occupied row.
-     * @return the currently occupied row
+     * Get the currently occupied Coord.
+     * @return a Coord object representing the currently occupied Cell
      */
-    public int curRow() {
-        return this.curRow;
+    public Coord curCoord() {
+        return new Coord(this.curRow, this.curCol);
     }
 
     /**
-     * Get the currently occupied column.
-     * @return the currently occupied column
+     * Get this Grid's end Coord.
+     * @return this Grid's end Coord
      */
-    public int curCol() {
-        return this.curCol;
+    public Coord endCoord() {
+        return this.end;
     }
 
     /**

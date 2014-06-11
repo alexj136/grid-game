@@ -17,8 +17,15 @@ import GameLogic.Cell;
 import GameLogic.FloorTile;
 import GameLogic.EmptySpace;
 import GameLogic.InvalidMoveException;
+import GameLogic.Coord;
 
 public class GameUI extends JFrame {
+
+    public static final Color VISITED = Color.BLUE;
+    public static final Color CURRENT = Color.GREEN;
+    public static final Color UNVISITED = Color.RED;
+    public static final Color END = Color.MAGENTA;
+    public static final Color EMPTY = Color.BLACK;
 
     private JPanel panel;
     private JLabel[][] labels;
@@ -57,20 +64,32 @@ public class GameUI extends JFrame {
         for(int rw = 0; rw < this.grid.numRows(); rw++) {
             for(int cl = 0; cl < this.grid.numCols(); cl++) {
                 Cell current = this.grid.cellAt(rw, cl);
-                if(rw == this.grid.curRow() && cl == this.grid.curCol()) {
-                    this.labels[rw][cl].setBackground(Color.GREEN);
+
+                // The current cell
+                if(rw == this.grid.curCoord().row
+                        && cl == this.grid.curCoord().col) {
+
+                    this.labels[rw][cl].setBackground(GameUI.CURRENT);
                 }
-                else if(rw == this.grid.endRow && cl == this.grid.endCol) {
-                    this.labels[rw][cl].setBackground(Color.MAGENTA);
+
+                // An end cell
+                else if(rw == this.grid.endCoord().row
+                        && cl == this.grid.endCoord().col) {
+
+                    this.labels[rw][cl].setBackground(GameUI.END);
                 }
+
+                // A FloorTile, visited or not
                 else if(current instanceof FloorTile) {
                     this.labels[rw][cl].setBackground(
                             ((FloorTile) current).visited() ?
-                            Color.BLUE : Color.RED);
+                            GameUI.VISITED : GameUI.UNVISITED);
                 }
+
+                // An EmptySpace
                 else {
                     assert(current instanceof EmptySpace);
-                    this.labels[rw][cl].setBackground(Color.BLACK);
+                    this.labels[rw][cl].setBackground(GameUI.EMPTY);
                 }
             }
         }
@@ -117,7 +136,7 @@ public class GameUI extends JFrame {
             {true, true, true},
             {true, true, true}
         };
-        Grid g = new Grid(arr, 0, 0, 2, 2);
+        Grid g = new Grid(arr, new Coord(0, 0), new Coord(2, 2));
         GameUI ui = new GameUI(g);
     }
 }
