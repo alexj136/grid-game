@@ -44,6 +44,23 @@ public class Level {
     public Level(boolean[][] grid, Coord start, ArrayList<Coord> ends) {
         this.grid = grid;
         this.start = start;
-        this.ends = ends
+        this.ends = ends;
+    }
+
+    public static final ArrayList<Level> levels = new ArrayList<Level>();
+    static {
+
+        // Level 1
+        boolean[][] level1Grid = new boolean[][] {
+            {true, true, true},
+            {true, true, true},
+            {true, true, true}
+        };
+        Coord level1Start = new Coord(0, 0);
+        ArrayList<Coord> level1Ends = new ArrayList<Coord>();
+        level1Ends.add(new Coord(2, 2));
+        Level.levels.add(new Level(level1Grid, level1Start, level1Ends));
+
+        // Level 2
     }
 }
