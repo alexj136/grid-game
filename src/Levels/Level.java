@@ -32,7 +32,16 @@ public class Level {
     /**
      * All possible end coordinates for this Level
      */
-    public final ArrayList<Coord> ends;
+    private final ArrayList<Coord> ends;
+
+    /**
+     * Determine if the given Coord is a valid end Coord.
+     * @param maybeEnd the Coord that may be an end
+     * @return true if the given Coord is an end, false otherwise
+     */
+    public boolean isEndCoord(Coord maybeEnd) {
+
+    }
 
     /**
      * Construct a new Level object.

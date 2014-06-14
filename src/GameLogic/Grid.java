@@ -1,5 +1,9 @@
 package GameLogic;
 
+import java.util.ArrayList;
+
+import Levels.Level;
+
 public class Grid {
 
     public static final byte UP = 0;
@@ -9,57 +13,38 @@ public class Grid {
 
     private Cell[][] grid;
 
-    private final Coord start;
-
     private int curRow;
     private int curCol;
 
-    private final Coord end;
-
     /**
      * Construct a new Grid from the given template.
-     * @param template A boolean array representing the structure of the Grid to
-     * be constructed.
-     * @param startRow The row number of the starting Cell. Verified to be a
-     * sensible value (Not out of bounds or an EmptySpace).
-     * @param startCol The column number of the starting Cell
-     * @param endRow The row number of the ending Cell
-     * @param endCol The column number of the ending Cell
+     * @param lvl a Level object, which is a static description of a level
+     * @return a new Grid object as specified by the given Level
      */
-    public Grid(boolean[][] template, Coord start, Coord end) {
+    public Grid(Level lvl) {
 
-        int rows = template.length;
-        int cols = template[0].length;
+        int rows = lvl.grid.length;
+        int cols = lvl.grid[0].length;
 
-        // Check that the start and end coordinates fall within the Grid
-        // boundaries on non-empty Cells.
-        if(!((start.row < template.length)
-                && (start.col < template[0].length)
-                && (end.row < template.length)
-                && (end.col < template[0].length)
-                && (template[start.row][start.col])
-                && (template[end.row][end.col]))) {
-
-            throw new IllegalArgumentException("Invalid start/end point "
-                    + "coordinates");
-        }
-
-        this.curRow = start.row;
-        this.curCol = start.col;
-        this.start = start;
-        this.end = end;
+        this.curRow = lvl.start.row;
+        this.curCol = lvl.start.row;
 
         // Initialise the grid member array of Cells
         this.grid = new Cell[rows][cols];
         for(int rw = 0; rw < rows; rw++) {
             for(int cl = 0; cl < cols; cl++) {
-                this.grid[rw][cl] =
-                    template[rw][cl] ? new FloorTile() : new EmptySpace();
+                if(lvl.grid[rw][cl]) {
+                    this.grid[rw][cl] =
+                        template[rw][cl] ? new FloorTile() : new EmptySpace();
+                }
+                else {
+                    this.grid[rw][cl] = new EmptySpace();
+                }
             }
         }
 
         try {
-            ((FloorTile) this.grid[this.start.row][this.start.col]).visit();
+            ((FloorTile) this.grid[lvl.start.row][lvl.start.col]).visit();
         }
         catch(MultipleFloorTileVisitsException e) {
             System.out.println("MultipleFloorTileVisitsException thrown" +
