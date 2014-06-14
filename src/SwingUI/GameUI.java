@@ -11,6 +11,7 @@ import java.awt.GridLayout;
 import java.awt.event.KeyListener;
 import java.awt.event.KeyEvent;
 import java.awt.Color;
+import java.awt.Dimension;
 
 import GameLogic.Grid;
 import GameLogic.Cell;
@@ -60,6 +61,7 @@ public class GameUI extends JFrame {
         this.panel.addKeyListener(new GameUIKeyListener(this));
         this.panel.setFocusable(true);
         this.setVisible(true);
+        this.setSize(new Dimension(500, 500));
         this.updateGridDisplay();
     }
 
