@@ -33,9 +33,11 @@ public class Grid {
         this.grid = new Cell[rows][cols];
         for(int rw = 0; rw < rows; rw++) {
             for(int cl = 0; cl < cols; cl++) {
+
                 if(lvl.grid[rw][cl]) {
                     this.grid[rw][cl] =
-                        template[rw][cl] ? new FloorTile() : new EmptySpace();
+                        lvl.isEndCoord(new Coord(rw, cl)) ?
+                                new EndFloorTile() : new FloorTile();
                 }
                 else {
                     this.grid[rw][cl] = new EmptySpace();
@@ -74,14 +76,6 @@ public class Grid {
      */
     public Coord curCoord() {
         return new Coord(this.curRow, this.curCol);
-    }
-
-    /**
-     * Get this Grid's end Coord.
-     * @return this Grid's end Coord
-     */
-    public Coord endCoord() {
-        return this.end;
     }
 
     /**

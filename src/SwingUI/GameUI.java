@@ -15,9 +15,12 @@ import java.awt.Color;
 import GameLogic.Grid;
 import GameLogic.Cell;
 import GameLogic.FloorTile;
+import GameLogic.EndFloorTile;
 import GameLogic.EmptySpace;
 import GameLogic.InvalidMoveException;
 import GameLogic.Coord;
+
+import Levels.Level;
 
 public class GameUI extends JFrame {
 
@@ -72,18 +75,17 @@ public class GameUI extends JFrame {
                     this.labels[rw][cl].setBackground(GameUI.CURRENT);
                 }
 
-                // An end cell
-                else if(rw == this.grid.endCoord().row
-                        && cl == this.grid.endCoord().col) {
-
-                    this.labels[rw][cl].setBackground(GameUI.END);
-                }
-
                 // A FloorTile, visited or not
                 else if(current instanceof FloorTile) {
-                    this.labels[rw][cl].setBackground(
-                            ((FloorTile) current).visited() ?
-                            GameUI.VISITED : GameUI.UNVISITED);
+                    if(((FloorTile) current).visited()) {
+                        this.labels[rw][cl].setBackground(GameUI.VISITED);
+                    }
+                    else if(current instanceof EndFloorTile) {
+                        this.labels[rw][cl].setBackground(GameUI.END);
+                    }
+                    else {
+                        this.labels[rw][cl].setBackground(GameUI.UNVISITED);
+                    }
                 }
 
                 // An EmptySpace
@@ -131,12 +133,6 @@ public class GameUI extends JFrame {
      * TODO remove this method from final build
      */
     public static void main(String[] args) {
-        boolean[][] arr = new boolean[][] {
-            {true, true, true},
-            {false, true, true},
-            {false, true, true}
-        };
-        Grid g = new Grid(arr, new Coord(0, 0), new Coord(2, 2));
-        GameUI ui = new GameUI(g);
+        new GameUI(new Grid(Level.levels.get(0)));
     }
 }

@@ -1,6 +1,7 @@
 package Levels;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 import GameLogic.Coord;
 
@@ -40,7 +41,13 @@ public class Level {
      * @return true if the given Coord is an end, false otherwise
      */
     public boolean isEndCoord(Coord maybeEnd) {
-
+        boolean found = false;
+        Iterator<Coord> iter = this.ends.iterator();
+        while((!found) && iter.hasNext()) {
+            Coord nextEnd = iter.next();
+            found = Coord.areSame(nextEnd, maybeEnd);
+        }
+        return found;
     }
 
     /**
@@ -59,17 +66,17 @@ public class Level {
     public static final ArrayList<Level> levels = new ArrayList<Level>();
     static {
 
-        // Level 1
-        boolean[][] level1Grid = new boolean[][] {
+        // Level 0
+        boolean[][] level0Grid = new boolean[][] {
             {true, true, true},
             {true, true, true},
             {true, true, true}
         };
-        Coord level1Start = new Coord(0, 0);
-        ArrayList<Coord> level1Ends = new ArrayList<Coord>();
-        level1Ends.add(new Coord(2, 2));
-        Level.levels.add(new Level(level1Grid, level1Start, level1Ends));
+        Coord level0Start = new Coord(0, 0);
+        ArrayList<Coord> level0Ends = new ArrayList<Coord>();
+        level0Ends.add(new Coord(2, 2));
+        Level.levels.add(new Level(level0Grid, level0Start, level0Ends));
 
-        // Level 2
+        // More level code goes here...
     }
 }
