@@ -11,16 +11,6 @@ import GameLogic.Coord;
 public class Level {
 
     /**
-     * Represents a FloorTile location
-     */
-    public static final boolean Y = true;
-
-    /**
-     * Represents an EmptySpace location
-     */
-    public static final boolean N = false;
-
-    /**
      * The grid layout for this Level
      */
     public final boolean[][] grid;
@@ -76,6 +66,17 @@ public class Level {
         ArrayList<Coord> level0Ends = new ArrayList<Coord>();
         level0Ends.add(new Coord(2, 2));
         Level.levels.add(new Level(level0Grid, level0Start, level0Ends));
+
+        // Level 1
+        boolean[][] level1Grid = new boolean[][] {
+            {true, true, true, true},
+            {true, false, true, true},
+            {true, true, true, false}
+        };
+        Coord level1Start = new Coord(0, 0);
+        ArrayList<Coord> level1Ends = new ArrayList<Coord>();
+        level1Ends.add(new Coord(0, 1));
+        Level.levels.add(new Level(level1Grid, level1Start, level1Ends));
 
         // More level code goes here...
     }

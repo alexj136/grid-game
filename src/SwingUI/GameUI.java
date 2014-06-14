@@ -68,27 +68,38 @@ public class GameUI extends JFrame {
             for(int cl = 0; cl < this.grid.numCols(); cl++) {
                 Cell current = this.grid.cellAt(rw, cl);
 
-                // The current cell
+                // The current cell, which always has colour precedence
                 if(rw == this.grid.curCoord().row
                         && cl == this.grid.curCoord().col) {
 
                     this.labels[rw][cl].setBackground(GameUI.CURRENT);
                 }
 
-                // A FloorTile, visited or not
+                // A FloorTile - has visited colour if visited wheter or not
+                // it's an end. If not visited, end colour has precedence over
+                // visited colour.
                 else if(current instanceof FloorTile) {
-                    if(((FloorTile) current).visited()) {
-                        this.labels[rw][cl].setBackground(GameUI.VISITED);
-                    }
-                    else if(current instanceof EndFloorTile) {
+                    // not visited and is and end
+                    if(!((FloorTile) current).visited()
+                            && (current instanceof EndFloorTile)) {
+
                         this.labels[rw][cl].setBackground(GameUI.END);
                     }
-                    else {
+
+                    // not visited and not an end
+                    else if(!((FloorTile) current).visited()
+                            && (!(current instanceof EndFloorTile))) {
                         this.labels[rw][cl].setBackground(GameUI.UNVISITED);
+                    }
+
+                    // visited, end or not an end
+                    else {
+                        assert(((FloorTile) current).visited());
+                        this.labels[rw][cl].setBackground(GameUI.VISITED);
                     }
                 }
 
-                // An EmptySpace
+                // An EmptySpace - always has empty colour.
                 else {
                     assert(current instanceof EmptySpace);
                     this.labels[rw][cl].setBackground(GameUI.EMPTY);
@@ -133,6 +144,6 @@ public class GameUI extends JFrame {
      * TODO remove this method from final build
      */
     public static void main(String[] args) {
-        new GameUI(new Grid(Level.levels.get(0)));
+        new GameUI(new Grid(Level.levels.get(1)));
     }
 }
