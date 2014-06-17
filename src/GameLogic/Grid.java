@@ -6,13 +6,20 @@ import Levels.Level;
 
 public class Grid {
 
+    // Direction constants
     public static final byte UP = 0;
     public static final byte RIGHT = 1;
     public static final byte DOWN = 2;
     public static final byte LEFT = 3;
 
+    // The grid
     private Cell[][] grid;
 
+    // Used to keep track of acquired bonuses
+    private byte previousMoveDirection;
+    private int collectedBonuses;
+
+    // Current grid position
     private int curRow;
     private int curCol;
 
@@ -52,6 +59,9 @@ public class Grid {
             System.out.println("MultipleFloorTileVisitsException thrown" +
                     " visiting starting FloorTile in Grid() constructor");
         }
+
+        this.previousMoveDirection = -1;
+        this.collectedBonuses = 0;
     }
 
     /**
@@ -107,23 +117,41 @@ public class Grid {
         try {
             if(direction == Grid.UP) {
                 ((FloorTile)this.grid[curRow - 1][curCol]).visit();
+                updateCollectedBonuses(direction);
                 curRow--;
             }
             else if(direction == Grid.RIGHT) {
                 ((FloorTile)this.grid[curRow][curCol + 1]).visit();
+                updateCollectedBonuses(direction);
                 curCol++;
             }
             else if(direction == Grid.DOWN) {
                 ((FloorTile)this.grid[curRow + 1][curCol]).visit();
+                updateCollectedBonuses(direction);
                 curRow++;
             }
             else /*direction == Grid.LEFT*/ {
                 ((FloorTile)this.grid[curRow][curCol - 1]).visit();
+                updateCollectedBonuses(direction);
                 curCol--;
             }
         }
         catch(MultipleFloorTileVisitsException mftve) {
             throw new InvalidMoveException();
+        }
+
+        // LAST THING: update the previous move direction.
+        this.previousMoveDirection = direction;
+    }
+
+    private void updateCollectedBonuses(byte direction) {
+        if(this.grid[curRow][curCol] instanceof BonusTile) {
+            BonusTile tile = (BonusTile) this.grid[curRow][curCol];
+            if(tile.entryDirection == this.previousMoveDirection
+                    && tile.exitDirection == direction) {
+
+               collectedBonuses++; 
+            }
         }
     }
 
@@ -158,13 +186,11 @@ public class Grid {
     }
 
     /**
-     * Determine if this is grid has been completed successfully.
-     * @return true if the grid has been completed and has been completed
-     * successfully, false if it has not been completed or been completed
-     * unsuccessfully.
+     * Obtain a GameStatus object representing the current game status.
+     * @return a GameStatus object representing the current game status
      */
-    public boolean hasWon() {
-        System.out.println("WARNING: hasWon() not yet implemented");
+    public GameStatus getStatus() {
+        System.out.println("WARNING: getStatus() not yet implemented");
         return false;
     }
 
